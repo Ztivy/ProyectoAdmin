@@ -1,0 +1,89 @@
+enable
+configure terminal
+hostname IB-SWD-01
+ip domain-name dos.linces.edu.mx
+no ip domain-lookup
+
+enable secret class
+service password-encryption
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+
+line console 0
+password cisco
+login
+exit
+
+line vty 0 15
+transport input ssh
+login local
+exit
+
+!=============================
+! ACTIVAR CAPA 3
+!=============================
+
+ip routing
+
+!=============================
+! CONFIGURACION VTP
+!=============================
+
+vtp version 2
+vtp domain biomedica
+vtp mode server
+vtp password cisco123
+
+!=============================
+! VLANs DEL EDIFICIO IB
+!=============================
+
+vlan 31
+ name Laboratorio_IB
+exit
+
+vlan 32
+ name Camaras_IB
+exit
+
+vlan 33
+ name Jefatura_IB
+exit
+
+vlan 34
+ name Administrativos_IB
+exit
+
+vlan 99
+ name Admin_Infra_TI
+exit
+
+!=============================
+! SVI ADMINISTRACION
+!=============================
+
+interface vlan 99
+ ip address 172.26.36.131 255.255.255.128
+ no shutdown
+exit
+
+!=============================
+! RUTA POR DEFECTO (L3)
+!=============================
+
+ip route 0.0.0.0 0.0.0.0 172.26.36.254
+
+!=============================
+! TRONCAL HACIA CORE
+!=============================
+
+interface range g1/0/1-11
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 1,31,32,33,34,99
+exit
+
+end
+write memory

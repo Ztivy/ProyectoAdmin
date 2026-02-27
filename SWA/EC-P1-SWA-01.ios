@@ -1,0 +1,59 @@
+!Configuracion SW ACCESO: EC-P1-SWA-01
+enable
+configure terminal
+hostname EC-P1-SWA-01
+ip domain-name dos.linces.edu.mx
+banner motd #Unauthorized Access is prohibited#
+no ip domain-lookup
+enable secret class
+service password-encryption
+username admin secret cisco
+crypto key generate rsa
+1024
+ip ssh version 2
+
+line console 0
+password cisco
+login
+exit
+
+line vty 0 15
+transport input ssh
+login local
+exit
+
+!=============================
+! CONFIGURACION VTP
+!=============================
+vtp version 2
+vtp domain central
+vtp mode client
+vtp password cisco123
+
+
+!=============================
+! ASIGNACION DE PUERTOS
+!=============================
+
+interface range fa0/1-10
+switchport mode access
+switchport access vlan 6
+exit
+
+interface range fa0/11-20
+switchport mode access
+switchport access vlan 8
+exit
+
+!=============================
+! TRONCAL HACIA CORE
+!=============================
+
+interface range g0/1-2
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,6,8,99
+exit
+
+end
+write memory

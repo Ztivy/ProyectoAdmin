@@ -1,0 +1,88 @@
+!Configuracion SW DISTRIBUCION: BB-SWD-01
+
+enable
+configure terminal
+hostname BB-SWD-01
+ip domain-name dos.linces.edu.mx
+banner motd #Unauthorized Access is prohibited#
+no ip domain-lookup
+enable secret class
+service password-encryption
+username admin secret cisco
+
+crypto key generate rsa
+1024
+ip ssh version 2
+
+line console 0
+password cisco
+login
+exit
+
+line vty 0 15
+transport input ssh
+login local
+exit
+
+!=============================
+! ACTIVAR CAPA 3
+!=============================
+
+ip routing
+
+!=============================
+! CONFIGURACION VTP
+!=============================
+
+vtp version 2
+vtp domain biblioteca
+vtp mode server
+vtp password cisco123
+
+!=============================
+! CREACION DE VLANs
+!=============================
+
+vlan 41
+name Salas_Lectura_BB
+exit
+
+vlan 42
+name Camaras_BB
+exit
+
+vlan 43
+name Jefatura_BB
+exit
+
+vlan 44
+name Control_BB
+exit
+
+vlan 99
+name Admin_Infra_TI
+exit
+
+!=============================
+! SVI ADMINISTRACION
+!=============================
+
+interface vlan 99
+ip address 172.26.36.133 255.255.255.128
+no shutdown
+exit
+
+ip default-gateway 172.26.36.254
+
+!=============================
+! TRONCAL HACIA CORE
+!=============================
+
+interface range g1/0/1-11
+ switchport mode trunk
+ switchport nonegotiate
+ switchport trunk allowed vlan 1,41,42,43,44,99
+exit
+
+end
+write memory
