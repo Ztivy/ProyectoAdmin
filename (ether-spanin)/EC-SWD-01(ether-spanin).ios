@@ -1,0 +1,138 @@
+!Configuracion SW DISTRIBUCION: EC-SWD-01
+enable
+configure terminal
+hostname EC-SWD-01
+ip domain-name dos.linces.edu.mx
+banner motd #Unauthorized Access is prohibited#
+no ip domain-lookup
+enable secret class
+service password-encryption
+username admin secret cisco
+
+crypto key generate rsa
+1024
+ip ssh version 2
+
+line console 0
+password cisco
+login
+exit
+
+line vty 0 15
+transport input ssh
+login local
+exit
+
+!=============================
+! ACTIVAR CAPA 3
+!=============================
+ip routing
+
+!=============================
+! CONFIGURACION VTP
+!=============================
+vtp version 2
+vtp domain central
+vtp mode server
+vtp password cisco123
+
+!=============================
+! CREACION DE VLANs
+!=============================
+vlan 3
+name Administrativos
+exit
+
+vlan 4
+name Directivos
+exit
+
+vlan 5
+name Soporte_TI
+exit
+
+vlan 6
+name Estudiantes
+exit
+
+vlan 7
+name Servidores
+exit
+
+vlan 8
+name Profesores
+exit
+
+vlan 99
+name Admin_Infra_TI
+exit
+
+!=============================
+! SVI ADMINISTRACION
+!=============================
+interface vlan 99
+ip address 172.26.36.130 255.255.255.128
+no shutdown
+exit
+
+ip default-gateway 172.26.36.254
+
+!=============================
+! SPANNING TREE
+!=============================
+spanning-tree mode rapid-pvst
+spanning-tree vlan 3,4,5,6,7,8,99 priority 4096
+
+!=============================
+! ETHERCHANNEL HACIA EC-P1-SWA-01
+!=============================
+interface range g1/0/1-2
+channel-group 3 mode active
+no shutdown
+exit
+
+interface port-channel 3
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,6,8,99
+exit
+
+!=============================
+! ETHERCHANNEL HACIA EC-P2-SWA-01
+!=============================
+interface range g1/0/3-4
+channel-group 4 mode active
+no shutdown
+exit
+
+interface port-channel 4
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,3,5,99
+exit
+
+!=============================
+! ETHERCHANNEL HACIA EC-P3-SWA-01
+!=============================
+interface range g1/0/5-6
+channel-group 5 mode active
+no shutdown
+exit
+
+interface port-channel 5
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,4,7,99
+exit
+
+!=============================
+! TRONCAL HACIA CORE (EC-SWC-01)
+!=============================
+interface range g1/0/7-11
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,3,4,5,6,7,8,99
+exit
+
+end
+write memory
