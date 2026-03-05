@@ -1,0 +1,45 @@
+
+
+
+!=============================
+! ETHERCHANNEL HACIA EC-SWC-01
+!=============================
+interface range g1/0/7-8
+channel-group 6 mode active
+no shutdown
+exit
+
+interface port-channel 6
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,4,7,99
+exit
+
+
+
+
+!=============================
+! ETHERCHANNEL HACIA AE-SWA-01
+!=============================
+interface range g1/0/1-2
+channel-group 3 mode active
+no shutdown
+exit
+
+interface port-channel 3
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,11,12,13,14,99
+exit
+
+!=============================
+! TRONCAL HACIA CORE
+!=============================
+interface range g1/0/3-11
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,11,12,13,14,99
+exit
+
+end
+write memory

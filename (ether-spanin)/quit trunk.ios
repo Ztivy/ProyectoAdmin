@@ -1,0 +1,24 @@
+ena
+conf t
+int range g0/1-2
+no switchport nonegotiate
+no switchport mode trunk
+no switchport trunk allowed vlan all
+shut
+
+ena
+conf t
+int range g1/0/1-24, g1/1/1-4
+no switchport nonegotiate
+no switchport mode trunk
+no switchport trunk allowed vlan all
+shut
+
+ena
+conf t
+int range g1/0/1-2
+no switchport nonegotiate
+no switchport mode trunk
+no switchport trunk allowed vlan all
+shut
+
