@@ -78,7 +78,7 @@ spanning-tree vlan 11,12,13,14,99 priority 4096
 !=============================
 ! ETHERCHANNEL HACIA AE-SWA-01
 !=============================
-interface range g1/0/1-2
+interface range g1/0/3-4
 channel-group 1 mode active
 no shutdown
 exit
@@ -90,13 +90,42 @@ switchport trunk allowed vlan 1,11,12,13,14,99
 exit
 
 !=============================
+! ETHERCHANNEL HACIA EC-P1-SWC-01
+!=============================
+interface range g1/0/1-2
+channel-group 3 mode active
+no shutdown
+exit
+
+interface port-channel 3
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,11,12,13,14,99
+exit
+
+!=============================
+! ETHERCHANNEL HACIA EC-P2-SWA-01
+!=============================
+interface range g1/0/5-6
+channel-group 2 mode active
+no shutdown
+exit
+
+interface port-channel 2
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,11,12,13,14,99
+exit
+
+!=============================
 ! TRONCAL HACIA CORE
 !=============================
-interface range g1/0/3-11
+interface range g1/0/8-11
 switchport mode trunk
 switchport nonegotiate
 switchport trunk allowed vlan 1,11,12,13,14,99
 exit
 
 end
+
 write memory
