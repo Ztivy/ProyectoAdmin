@@ -1,8 +1,8 @@
 
-
+EC-SWD
 
 !=============================
-! ETHERCHANNEL HACIA EC-SWC-01
+! ETHERCHANNEL HACIA EC-P3-SWA-01
 !=============================
 interface range g1/0/7-8
 channel-group 6 mode active
@@ -16,8 +16,7 @@ switchport trunk allowed vlan 1,4,7,99
 exit
 
 
-
-
+AE-SWD
 !=============================
 ! ETHERCHANNEL HACIA AE-SWA-01
 !=============================
@@ -35,11 +34,12 @@ exit
 !=============================
 ! TRONCAL HACIA CORE
 !=============================
-interface range g1/0/3-11
+interface range g1/0/5-11
 switchport mode trunk
 switchport nonegotiate
 switchport trunk allowed vlan 1,11,12,13,14,99
 exit
 
 end
+
 write memory
