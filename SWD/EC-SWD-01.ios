@@ -58,7 +58,7 @@ exit
 ! SVI CENTRAL
 !=============================
 interface vlan 99
-ip address 172.26.36.129 255.255.255.128
+ip address 172.26.36.130 255.255.255.128
 no shutdown
 exit
 ip default-gateway 172.26.36.254
