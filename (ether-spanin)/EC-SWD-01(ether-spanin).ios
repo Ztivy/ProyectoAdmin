@@ -114,12 +114,12 @@ exit
 !=============================
 ! ETHERCHANNEL HACIA EC-P3-SWA-01
 !=============================
-interface range g1/0/5-6
-channel-group 5 mode active
+interface range g1/0/7-8
+channel-group 6 mode active
 no shutdown
 exit
 
-interface port-channel 5
+interface port-channel 6
 switchport mode trunk
 switchport nonegotiate
 switchport trunk allowed vlan 1,4,7,99
